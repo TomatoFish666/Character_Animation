@@ -1,0 +1,98 @@
+# BadApple_C_Version
+
+---
+
+---
+
+## 思路
+
+截取视频的每一帧，输出为图片                          
+将图片转换成ASCII码字符画，输出保存在一个文本文件中                
+每次输出一幅字符画，连续输出，形成动画                     
+
+### 环境
+
+- Ubuntu14.04 LTS                
+- gcc 4.8.4                   
+- opencv 2.4.9          
+- cmake 2.8           
+- make 3.81           
+          
+### 目录树         
+
+```
+
+```
+
+---
+
+## 第一步：抓帧
+
+### 参考学习            
+
+- [MPlayer 命令行模式用法详解](http://yp.oss.org.cn/software/show_resource.php?resource_id=716)            
+- [ubuntu14.04中安装opencv2.4.9](http://my.oschina.net/u/1757926/blog/293976?fromerr=bsAsKQ0w) ---> 亲测可用，还提供测试用例             
+- [OpenCV学习之视频读取与帧的提取、显示及保存](http://www.cnblogs.com/tgyf/archive/2013/05/19/3086916.html)                 
+
+### 方法1：mplayer
+
+Ubuntu下使用mplayer：
+
+`$ mplayer -vo jpeg <videoName>`          
+
+共6000+图片
+
+### 方法2：opencv库
+
+---
+
+## 第二步：图片转字符画
+
+### 参考学习            
+
+- [使用OpenCv把图片转为字符画](http://www.cnblogs.com/xianglan/archive/2010/12/01/1893840.html) ---> 算法比较粗糙，需要改进                    
+- [Linux下编译运行OpenCV程序的两种方法](http://www.tuicool.com/articles/ieuMRnr) ---> cmake 和 make                
+- [CMake与Make](http://my.oschina.net/xunxun/blog/86781)                 
+- [图片转化为ASCII图](http://tieba.baidu.com/p/1592726854) ---> 用的上古TC的` <graphics.h>`图形库，可借鉴其算法                  
+
+首先借助opencv库，写了一个能够将一张图片转换成字符画的程序                    
+然后借助Bash脚本，将6000+张图片全部转换成“字符画”，存入一个文本文档                 
+
+### 问题：画面“失真”       
+
+如果原图分辨率高（200*500）,将每个像素都转换成字符，会导致输出的字符画很大，即使缩小后也无法完整显示                  
+从输出的结果看，文本中一个字符的行高和列宽不相等，如果每个像素都转换成字符，正方形的图片输出很可能会变成长方形             
+先取一张图片测试调整，直到输出的“字符画”的尺寸合适              
+
+---
+
+## 第三步：字符画播放
+
+### 参考学习            
+
+- [Linux下C语言延时](http://blog.chinaunix.net/uid-722885-id-124909.html)                  
+- [C/C++ linux下光标定位和清屏函数(printf 实现)](http://zisedeqing.blog.163.com/blog/static/9555087120129111485394/)          
+- [xterm简单使用说明](http://wenku.baidu.com/link?url=8Tq5VYu6wBqXvN9pz7IMvT0xPaKpd5HfKmiltceLNIScNtTzP_nPq_nDOnapJbNVUWM4DQ5M64cIgqg0qonV_OteffgOWp4QlZR5ws_Hsxi)                      
+
+### 问题：画面闪烁
+
+一开始一行一行读取文件，读入一行输出一行，输出“一幅画”后清屏，光标重置左上角，但“播放”时，画面闪烁，有“扫描线”的感觉。。。          
+以为是文件读取的次数过多，输出的速度不够，于是一次输入一整幅画（61*161）再输出，但没有改善       
+
+和视频同时“播放”时，发现字符动画速度明显快于原视频，于是使用usleep函数减缓输出速度，大约延时33.5毫秒，可以和原视频同步。      
+同时发现延时之后，画面闪烁明显减轻         
+
+然后不知道什么心态，我注释掉了清屏的函数，意外发现画面闪烁问题进一步减轻，即使不延时，画面也基本不闪烁（但会出现闪烁的光标，延时后也基本不出现）          
+
+### 问题：播放难以同步
+
+为了尽可能同步播放，通过一个简单（3行代码）脚本，排除手动运行造成的延迟                
+因为无论先运行代码还是先播放视频，都会对字符输出造成一些影响，所以用xterm另外播放视频                 
+
+---
+
+## 其他
+
+python版：[bilibili_LuYU426用户 的多个视频](http://space.bilibili.com/77762/#!/index)           
+30种版本的Bad Apple：[Bad Apple：技术宅的盛宴](http://www.guokr.com/article/7268/)              
+做完才发现，但是没跑起来：[技术宅。Bad Apple 在 linux 中 字符 动画已完成](http://bbs.chinaunix.net/thread-1797109-1-1.html)
