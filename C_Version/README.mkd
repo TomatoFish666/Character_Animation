@@ -4,7 +4,7 @@
 
 ---
 
-## 思路
+### 思路
 
 截取视频的每一帧，输出为图片                          
 将图片转换成ASCII码字符画，输出保存在一个文本文件中                
@@ -50,19 +50,33 @@ Ubuntu下使用mplayer：
 
 ### 参考学习            
 
+- [百度百科_cvLoadImage](http://baike.baidu.com/link?url=l5riubpsQyBd5Jfh5ExedMmYwV16pmnO5KdQDufNQYPiAdJv2hvANWwxbOopAzz39rygAZoS3xxRm2TTviLwp_) ---> 载入图片，相应最后要cvReleaseImage()                    
+- [百度百科_灰度图像](http://baike.baidu.com/link?url=bqOnobbXhY1FEDj9FLiYenj2vnJ6g6cVvL3TdPdEF9zHPX5fUXUHo7_xWDbJQeiHZ0xO-D7ofgrIZE9YLDDbga)                    
+- [百度百科_CvScalar](http://baike.baidu.com/link?url=eNUXQWhY-oAjQ-WHar62q5Lf_xiH_s8tydxDO_PlfcZ5HTdAI0ZNqEn1rC2eVTbAa1ovkdtdAter07aRtiwJcq)                    
+- [cvGet2D](http://blog.sina.com.cn/s/blog_9edd4b8301013f83.html)                    
+- [opencv cvget2d怎么用](http://zhidao.baidu.com/link?url=wRmVi9neBnv23IzjbtlL9HhXtgmM7rP8Uru308HTu0T4KC_6HT4ZVfJu9HABg4VD-6TIz2QSBK6838J0MnAjna)                    
+- [百度百科_RGB](http://baike.baidu.com/link?url=KCl7qPqR6kIXxTJcAwl7ktPGLxtyAMOsJBP32uPqv0k8ZovAzDR1ZH1SYX0ilsVLDQxpl3hEl5TdOWSr-Tkc-a)                    
 - [使用OpenCv把图片转为字符画](http://www.cnblogs.com/xianglan/archive/2010/12/01/1893840.html) ---> 算法比较粗糙，需要改进                    
 - [Linux下编译运行OpenCV程序的两种方法](http://www.tuicool.com/articles/ieuMRnr) ---> cmake 和 make                
-- [CMake与Make](http://my.oschina.net/xunxun/blog/86781)                 
+- [CMake与Make](http://my.oschina.net/xunxun/blog/86781) ---> 新技能Get!                                    
 - [图片转化为ASCII图](http://tieba.baidu.com/p/1592726854) ---> 用的上古TC的` <graphics.h>`图形库，可借鉴其算法                  
 
-首先借助opencv库，写了一个能够将一张图片转换成字符画的程序                    
-然后借助Bash脚本，将6000+张图片全部转换成“字符画”，存入一个文本文档                 
+### 一张图片转字符画            
+
+首先借助opencv库，写一个能够将一张图片转换成字符画的程序 (Pic2Asc.c)                    
+先打表设置了32个字符的灰度值，输出中间值得到白色的灰度是255，然后依次递减（步长为8），直到最后'@'为7。                    
+“遍历”每个像素点，读取它的灰度值，然后查表找到最后一个比该灰度值大的数，输出对应的字符到文件                       
+因为是一个文本文档，所以应该是追加写入                     
+
+### 所有图片转字符画            
+
+借助Bash脚本 (Pic2Asc_all.sh)，将6000+张图片全部转换成“字符画”，存入一个文本文档 (AscPic.txt)                 
 
 ### 问题：画面“失真”       
 
-如果原图分辨率高（200*500）,将每个像素都转换成字符，会导致输出的字符画很大，即使缩小后也无法完整显示                  
-从输出的结果看，文本中一个字符的行高和列宽不相等，如果每个像素都转换成字符，正方形的图片输出很可能会变成长方形             
-先取一张图片测试调整，直到输出的“字符画”的尺寸合适              
+字符比像素点大很多，如果每个像素对应一个字符，输出的字符画会很大，无法完整显示                 
+从输出的结果看，文本中一个字符的行高和列宽不相等，行与列输出的比例选择不对，正方形的图片输出很可能会变成长方形             
+经过测试，按照 行:列=2:1 的比例处理图片（即 每2n行n列 处理一个像素点），得到的字符画的比例和原图较为接近                              
 
 ---
 
