@@ -71,6 +71,7 @@ Ubuntu下使用mplayer：
 ### 所有图片转字符画            
 
 借助Bash脚本 (Pic2Asc_all.sh)，将6000+张图片全部转换成“字符画”，存入一个文本文档 (AscPic.txt)                 
+mplayer输出的图片按序命名，Ubuntu下的 ls 命令的输出结果也正好升序，没有遇到字符画顺序问题                       
 
 ### 问题：画面“失真”       
 
