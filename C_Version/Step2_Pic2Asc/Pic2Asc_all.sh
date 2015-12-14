@@ -17,5 +17,6 @@ fi
 
 for eachPic in `ls $1`
 do
-    ./test $eachPic $2
+    ./Pic2Asc $1/$eachPic $2
+    echo "$eachPic done!"
 done

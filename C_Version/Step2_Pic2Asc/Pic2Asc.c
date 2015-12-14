@@ -91,10 +91,10 @@ int main(int argc , char * argv[])
              * fprintf(fp,"%d,",grayLevel);
              */
             fprintf(fp,"%c",asc[SearchGray(grayLevel)]);
-            j += 5;
+            j += 6;
         } 
         fprintf(fp,"\n");
-        i += 10;
+        i += 12;
     }
     fprintf(fp,"\n");
 
