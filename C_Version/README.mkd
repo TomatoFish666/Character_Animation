@@ -21,7 +21,20 @@
 ### 目录树         
 
 ```
-
+C_Version
+├── README.mkd
+├── Step1_Screen_Grab
+│   ├── Grab_with_mplayer.sh
+│   ├── Grab_with_opencv.c
+│   └── images
+├── Step2_Pic2Asc
+│   ├── AscPic.txt
+│   ├── Pic2Asc_all.sh
+│   └── Pic2Asc.c
+└── Step3_Play
+    ├── autoPlay.sh
+    ├── Play
+    └── Play.c
 ```
 
 ---
