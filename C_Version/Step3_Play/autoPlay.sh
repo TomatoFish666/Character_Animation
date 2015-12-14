@@ -1,5 +1,5 @@
 #!/bin/bash
 
-xterm -e "mplayer -xy 600 ./Bad_Apple.avi" &
+xterm -e "mplayer -xy 500 ../../Bad_Apple.avi" &
 
-./Play AscPic.txt
+./Play ../Step2_Pic2Asc/AscPic.txt
